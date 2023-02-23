@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# This is a Bash Script that displays Best School 10 times, but for the 9th iteration, displays Best School and then Hi on a new line && uses if and while loop.
+
+count=0
+while [ $count -lt 10 ] #iterate 10 times && count to keep track of the iteration
+do
+  if [ $count -eq 8 ] #check if count equals 8
+  then
+    echo "Best School"
+    echo "Hi"
+  else
+    echo "Best School"
+  fi
+  
+  count=$((count+1))
+done
