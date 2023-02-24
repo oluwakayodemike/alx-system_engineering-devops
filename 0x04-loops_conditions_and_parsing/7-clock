@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Bash script that displays the time for 12 hours and 59 minutes, display hours from 0 to 12 and then display minutes from 1 to 59. we must use only the while loop
+
+for ((hour=0; hour<=12; hour++)); do
+  echo "Hour : $hour"
+  for ((minute=1; minute<=59; minute++)); do
+	  if [ $minute -lt 10 ]; then #the if statement is used to check if the minutes is less than 10 and then display them without adding the 0 ahead of it. 
+		  printf "%d\n" $minute
+	  else
+		  printf "%02d\n" $minute
+	  fi
+  done
+done
