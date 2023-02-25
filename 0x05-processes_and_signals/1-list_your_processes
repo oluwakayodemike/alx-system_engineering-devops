@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This is a Bash script that displays a list of currently running processes, Display in a user-oriented format, Show process hierarchy. 
+
+echo "PID\tTTY\tSTAT\tTIME\tCOMMAND"
+
+ps auxf | awk '{printf "%s\t%s\t%s\t%s\t%s\n", $2, $7, $8, $9, $11}'
+
