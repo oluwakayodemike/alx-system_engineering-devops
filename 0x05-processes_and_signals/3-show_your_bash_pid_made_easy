@@ -1,0 +1,10 @@
+#!/bin/bash
+
+pids=$(pgrep -f bash) # here pgrep is used to find the PID containing the name 'bash'
+
+for pid in $pids
+do
+  name=$(ps -p $pid -o comm=) # there is a loop that goes through each PID and display the process name and the PID
+  echo "PID: $pid  Name: $name"
+done
+
