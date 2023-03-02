@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#Bash script that displays listening ports: Showing only the listening sockets and the PID and name of the program to which each socket belongs
+
+echo "Listening ports:"
+
+netstat -lnp | grep '^tcp\|^udp' | awk '{print $4, $7}' | while read line; do
+
+    ip=$(echo $line | awk -F ':' '{print $1}')
+    port=$(echo $line | awk -F ':' '{print $2}')
+
+    pid=$(sudo lsof -i :$port -sTCP:LISTEN -P -t)
+    if [[ -n "$pid" ]]; then
+        process=$(ps -p $pid -o comm=)
+        echo "  $ip:$port  (PID: $pid, Process: $process)"
+    fi
+done
+
