@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+#A regular expression matching School
 
 regex = /School/
 string = ARGV[0]
