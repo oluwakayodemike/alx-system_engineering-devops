@@ -1,12 +1,4 @@
 #!/usr/bin/env ruby
-#A regular expression matching School
+#Accepts one argument and passes it to a regular expression matching method.
 
-regex = /School/
-string = ARGV[0]
-
-if string =~ regex
-  puts string.match(regex)
-else
-  puts ""
-end
-
+puts ARGV[0].scan(/School/).join('$')
