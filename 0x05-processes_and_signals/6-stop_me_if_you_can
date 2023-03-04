@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This script stops 4-to_infinity_and_beyond process.
+# Requirement - You cannot use kill or killall
+
+for pid in $(pgrep -f 4-to_infinity_and_beyond); do
+  kill -TERM "$pid"
+done
+
