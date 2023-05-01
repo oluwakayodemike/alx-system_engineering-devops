@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+configure_nginx() {
+    # Install Nginx
+    sudo apt-get update
+    sudo apt-get -y install nginx
+
+    # Configure firewall to allow requests through port 80
+    sudo ufw allow 'Nginx HTTP'
+
+    # Create directory for website files
+    sudo mkdir -p /var/www/html
+
+    # Change permissions to allow easy file creation
+    sudo chmod -R 755 /var/www
+
+    # Create index page
+    echo 'Hello World!' | sudo tee /var/www/html/index.html
+
+    # Create custom error page
+    echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+
+    # Add custom header to Nginx HTTP response
+    header_string="add_header X-Served-By \$hostname;"
+    sudo sed -i "/^http {/a $header_string" /etc/nginx/nginx.conf
+
+    # Configure redirect for a single page and add header to display hostname
+    redirect_string="server {\n\tlisten 80;\n\tserver_name _;\n\tadd_header X-Served-By \$hostname;\n\tlocation /redirect_me {\n\t\treturn 301 https://www.blog.ehoneahobed.com;\n\t}\n}"
+    sudo rm -f /etc/nginx/sites-enabled/default
+    echo -e "$redirect_string" | sudo tee /etc/nginx/sites-available/redirect > /dev/null
+    sudo ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
+    sudo rm -f /etc/nginx/sites-enabled/default
+
+    # Configure redirect for 404 error page
+    error_string="server {\n\tlisten 80 default_server;\n\terror_page 404 /404.html;\n\tlocation = /404.html {\n\t\tinternal;\n\t}\n}"
+    echo -e "$error_string" | sudo tee /etc/nginx/sites-available/error > /dev/null
+    sudo ln -s /etc/nginx/sites-available/error /etc/nginx/sites-enabled/
+}
+
+configure_nginx
+
+# Restart Nginx service
+sudo service nginx restart
+
