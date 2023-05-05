@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# This script update the package list, install Nginx, backup the default configuration file, modify the default configuration file to listen on all active IPv4 addresses, check the configuration syntax, and reload Nginx. The modified configuration file will allow Nginx to listen on port 80 of all active IPv4 addresses.
+
+apt-get update
+apt-get install -y nginx
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+sed -i 's/listen \[::\]:80 default_server;/listen 0.0.0.0:80 default_server;/' /etc/nginx/sites-available/default
+nginx -t && systemctl reload nginx
