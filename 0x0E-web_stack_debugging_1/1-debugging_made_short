@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#This script stops any running instances of nginx, updates the default server block to listen on port 80, and starts nginx. It then checks if nginx is running using the service command.
+
+service nginx stop
+sed -i 's/80 default_server;/80;/g' /etc/nginx/sites-available/default
+service nginx start
+service nginx status
