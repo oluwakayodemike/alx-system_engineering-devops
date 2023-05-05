@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-service nginx stop
+#service (init) must say that nginx is not running ← for real
 sed -i 's/80 default_server;/80;/g' /etc/nginx/sites-available/default
-service nginx start
-service nginx status
+service nginx restart
+kill $(pidof nginx)
