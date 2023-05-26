@@ -15,8 +15,8 @@ def get_employee_todo_progress(employee_id):
     """
 
     # Fetch employee data
-    employee_url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
-    todos_url = "https://jsonplaceholder.typicode.com/todos?userId={}".format(employee_id)
+    employee_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+    todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}"
 
     try:
         employee_response = requests.get(employee_url)
@@ -34,15 +34,13 @@ def get_employee_todo_progress(employee_id):
         completed_count = len(completed_tasks)
 
         # Format progress information
-        progress_info = "Employee {} is done with tasks({}/{}):\n".format(
-            employee_name, completed_count, total_tasks
-        )
-        task_titles = "\n".join("\t{}".format(task['title']) for task in completed_tasks)
+        progress_info = f"Employee {employee_name} is done with tasks({completed_count}/{total_tasks}):\n"
+        task_titles = "\n".join(f"\t{task['title']}" for task in completed_tasks)
 
         return progress_info + task_titles
 
     except requests.exceptions.RequestException as e:
-        return "An error occurred: {}".format(e)
+        return f"An error occurred: {e}"
 
 
 if __name__ == "__main__":
