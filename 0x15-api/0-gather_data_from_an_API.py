@@ -8,17 +8,18 @@ if len(sys.argv) != 2 or not sys.argv[1].isdigit():
 employee_id = int(sys.argv[1])
 
 # Make a GET request to the API
-response = requests.get(f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos")
+url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(employee_id)
+response = requests.get(url)
 todos = response.json()
 
 # Filter completed tasks
 completed_tasks = [todo for todo in todos if todo['completed']]
 
-# Get the employee name
+# Get employee name
 employee_name = todos[0]['name']
 
-# Display the progress
-print(f"Employee {employee_name} is done with tasks({len(completed_tasks)}/{len(todos)}):")
+# Display progress
+print("Employee", employee_name, "is done with tasks({}/{}):".format(len(completed_tasks), len(todos)))
 for task in completed_tasks:
     print("\t", task['title'])
 
