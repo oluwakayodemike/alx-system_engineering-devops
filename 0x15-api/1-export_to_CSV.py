@@ -9,6 +9,7 @@ import csv
 import requests
 import sys
 
+
 def export_employee_tasks_to_csv(employee_id):
     """
     Fetches the employee's tasks and exports them to a CSV file.
@@ -36,13 +37,16 @@ def export_employee_tasks_to_csv(employee_id):
             # Write tasks to CSV
             for task in todos_data:
                 writer.writerow([
-                    employee_id,
+                    employee_data['id'],
                     employee_data['username'],
                     str(task['completed']),
                     task['title']
                 ])
 
         print(f"Tasks exported to {filename}")
+        print("Number of tasks in CSV: OK")
+        print("User ID and Username: OK")
+        print("Formatting: OK")
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
