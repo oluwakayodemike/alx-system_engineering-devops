@@ -34,10 +34,10 @@ def get_employee_todo_progress(employee_id):
         completed_count = len(completed_tasks)
 
         # Format progress information
-        progress_info = f"Employee {employee_name} is done with tasks({completed_count}/{total_tasks}):\n"
-        task_titles = "\n".join(f"\t{task['title']}" for task in completed_tasks)
+        progress_info = f"Employee {employee_name} is done with tasks({completed_count}/{total_tasks}):"
+        task_titles = "\n".join(f"\n\t{task['title']}" for task in completed_tasks)
 
-        return progress_info + task_titles
+        return f"{progress_info}{task_titles}"
 
     except requests.exceptions.RequestException as e:
         return f"An error occurred: {e}"
