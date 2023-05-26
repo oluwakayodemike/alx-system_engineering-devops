@@ -5,8 +5,8 @@ This script fetches and displays information about an employee's TODO list progr
 using a provided REST API.
 """
 
-import sys
 import requests
+import sys
 
 
 def get_employee_todo_progress(employee_id):
