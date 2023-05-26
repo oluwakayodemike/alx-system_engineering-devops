@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 """
-This script fetches and exports data about an employee's tasks in CSV format
-using a provided REST API.
+This script fetches and exports information about an employee's TODO list progress
+in CSV format using a provided REST API.
 """
 
 import csv
@@ -10,9 +10,9 @@ import requests
 import sys
 
 
-def export_employee_tasks_to_csv(employee_id):
+def export_employee_todo_progress_to_csv(employee_id):
     """
-    Fetches the employee's tasks and exports them to a CSV file.
+    Fetches the employee's TODO list progress and exports it in CSV format.
     """
 
     # Fetch employee data
@@ -26,27 +26,27 @@ def export_employee_tasks_to_csv(employee_id):
         employee_data = employee_response.json()
         todos_data = todos_response.json()
 
-        # Prepare CSV filename
-        filename = f"{employee_id}.csv"
+        # Filter completed tasks
+        completed_tasks = [task for task in todos_data if task['completed']]
 
-        # Open CSV file in write mode
-        with open(filename, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+        # Prepare CSV file name
+        csv_file_name = f"{employee_id}.csv"
 
-            # Write tasks to CSV
-            for task in todos_data:
-                writer.writerow([
-                    employee_data['id'],
-                    employee_data['username'],
-                    str(task['completed']),
-                    task['title']
-                ])
+        # Prepare CSV data
+        csv_data = []
+        for task in completed_tasks:
+            task_id = task['id']
+            task_title = task['title']
+            task_completed_status = str(task['completed'])
+            csv_data.append([employee_id, employee_data['username'], task_completed_status, task_title])
 
-        print(f"Tasks exported to {filename}")
-        print("Number of tasks in CSV: OK")
-        print("User ID and Username: OK")
-        print("Formatting: OK")
+        # Write CSV file
+        with open(csv_file_name, 'w', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(['USER_ID', 'USERNAME', 'TASK_COMPLETED_STATUS', 'TASK_TITLE'])
+            writer.writerows(csv_data)
+
+        print(f"Data exported to {csv_file_name}")
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
@@ -58,5 +58,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     employee_id = int(sys.argv[1])
-    export_employee_tasks_to_csv(employee_id)
+    export_employee_todo_progress_to_csv(employee_id)
 
