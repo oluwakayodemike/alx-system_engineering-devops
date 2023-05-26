@@ -1,45 +1,38 @@
+#!/usr/bin/python3
 
-rt sys
+import sys
 import requests
-
-def gather_data_from_API(employee_id):
-    """
-    Retrieves and displays the employee's TODO list progress.
-
-    Args:
-        employee_id (int): The employee ID.
-
-    Returns:
-        None
-    """
-    # Make a GET request to the API
-    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    response = requests.get(url)
-    employee = response.json()
-
-    # Get employee details
-    employee_name = employee['name']
-
-    # Make a GET request for the employee's TODO list
-    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-    response = requests.get(url)
-    todos = response.json()
-
-    # Calculate the number of completed tasks
-    completed_tasks = [todo for todo in todos if todo['completed']]
-    num_completed_tasks = len(completed_tasks)
-    total_tasks = len(todos)
-
-    # Display the employee TODO list progress
-    print(f"Employee {employee_name} is done with tasks({num_completed_tasks}/{total_tasks}):")
-    for task in completed_tasks:
-        print(f"    {task['title']}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 or not sys.argv[1].isdigit():
-        print("Usage: python3 gather_data_from_API.py <employee_id>")
+        print("Usage: python3 gather_data_from_an_API.py employee_id")
         sys.exit(1)
 
     employee_id = int(sys.argv[1])
-    gather_data_from_API(employee_id)
+
+    # Fetch employee data
+    employee_url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
+    todos_url = "https://jsonplaceholder.typicode.com/todos?userId={}".format(employee_id)
+
+    try:
+        employee_response = requests.get(employee_url)
+        todos_response = requests.get(todos_url)
+
+        employee_data = employee_response.json()
+        todos_data = todos_response.json()
+
+        # Filter completed tasks
+        completed_tasks = [task for task in todos_data if task['completed']]
+
+        # Display progress information
+        employee_name = employee_data['name']
+        total_tasks = len(todos_data)
+        completed_count = len(completed_tasks)
+
+        print("Employee {} is done with tasks({}/{}):".format(employee_name, completed_count, total_tasks))
+        for task in completed_tasks:
+            print("\t{}".format(task['title']))
+
+    except requests.exceptions.RequestException as e:
+        print("An error occurred:", e)
 
